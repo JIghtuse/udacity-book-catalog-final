@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="book-info">
+    <h2>{{book.title}}</h2>
+    <img src="{{book.cover_url}}" class="book-cover-image" alt="book cover">
+    <p class="book-description">{{book.description}}</p>
+    <div class="book-metadata">
+        <p>Genre: {{book.genre.name}}</p>
+        <p>Author: {{book.author}}</p>
+        <p>Year: {{book.year}}</p>
+        <p>Buy: <a href="{{book.buy_url}}">Amazon</a></p>
+    </div>
+</div>
+<div>
+    <form class="book-change" action="#">
+        <button type="submit" name="book-edit">Edit</button>
+        <button type="submit" name="book-delet">Delete</button>
+    </form>
+</div>
+{% endblock %}
