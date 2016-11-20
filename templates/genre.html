@@ -5,7 +5,7 @@
     <p class="genre-description">{{genre.description}}</p>
     <ul class="book-list">
         {% for book in genre_books: %}
-        <li><a href="/book/{{book.title}}">{{book.title}}</a></li>
+        <li><a href="/book/{{book.build_url()}}">{{book.title}}</a></li>
         {% endfor %}
     </ul>
     <a href="/genre/{{genre.name}}/new-book">Add new book</a>

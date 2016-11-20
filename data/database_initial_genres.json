@@ -1,0 +1,15 @@
+[
+    {"name": "comedy",
+     "description": "Books intended to be humorous or amusing by inducing laughter"},
+    {"name": "classic",
+     "description": "Fiction that has become part of an accepted literary canon, widely taught in schools"},
+    {"name": "drama",
+     "description": "Specific mode of fiction represented in performance. The term comes from a Greek word meaning \"action\" (Classical Greek: δρᾶμα, drama), which is derived from \"to do\" (Classical Greek: δράω, drao)"},
+    {"name": "fantasy",
+     "description": "Fiction genre that uses magic or other supernatural elements as a main plot element, theme, or setting. Many works within the genre take place in imaginary worlds where magic and magical creatures are common."
+    },
+    {"name": "horror",
+     "description": "Fiction which is intended to, or has the capacity to frighten, scare, disgust, or startle their readers or viewers by inducing feelings of horror and terror."},
+    {"name": "science fiction",
+    "description": "Genre of speculative fiction typically dealing with imaginative concepts such as futuristic science and technology, space travel, time travel, faster than light travel, parallel universes, and extraterrestrial life."}
+]

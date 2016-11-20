@@ -1,0 +1,72 @@
+[
+    {
+        "title": "Game of Thrones",
+        "cover_url": "https://upload.wikimedia.org/wikipedia/en/9/93/AGameOfThrones.jpg",
+        "cover_url_attribution": "https://en.wikipedia.org/wiki/File:AGameOfThrones.jpg",
+        "author": "George Martin",
+        "description": "Long ago, in a time forgotten, a preternatural event threw the seasons out of balance. In a land where summers can last decades and winters a lifetime, trouble is brewing. The cold is returning, and in the frozen wastes to the north of Winterfell, sinister forces are massing beyond the kingdom’s protective Wall. To the south, the king’s powers are failing—his most trusted adviser dead under mysterious circumstances and his enemies emerging from the shadows of the throne. At the center of the conflict lie the Starks of Winterfell, a family as harsh and unyielding as the frozen land they were born to. Now Lord Eddard Stark is reluctantly summoned to serve as the king’s new Hand, an appointment that threatens to sunder not only his family but the kingdom itself.",
+        "year": 1996,
+        "buy_url": "https://www.amazon.com/Game-Thrones-Song-Ice-Fire/dp/0553103547/ref=sr_1_1?s=books&ie=UTF8&qid=1479576348&sr=1-1&keywords=game++of+thrones+1996",
+        "genre": "fantasy"
+    },
+    {
+        "title": "The Hobbit, or There and Back Again",
+        "cover_url": "https://upload.wikimedia.org/wikipedia/en/4/4a/TheHobbit_FirstEdition.jpg",
+        "cover_url_attribution": "https://en.wikipedia.org/w/index.php?curid=20132075",
+        "author": "John Ronald Reuel Tolkien",
+        "description": "The Hobbit is a tale of high adventure, undertaken by a company of dwarves in search of dragon-guarded gold. A reluctant partner in this perilous quest is Bilbo Baggins, a comfort-loving unambitious hobbit, who surprises even himself by his resourcefulness and skill as a burglar.",
+        "year": 1937,
+        "buy_url": "https://www.amazon.com/Hobbit-J-R-R-Tolkien/dp/0618968636/ref=sr_1_1?ie=UTF8&qid=1479654906&sr=8-1&keywords=hobbit+hardcover",
+        "genre": "fantasy"
+    },
+    {
+        "title": "A Wizard of Earthsea",
+        "cover_url": "https://upload.wikimedia.org/wikipedia/en/5/59/AWizardOfEarthsea%281stEd%29.jpg",
+        "cover_url_attribution": "https://en.wikipedia.org/wiki/File:AWizardOfEarthsea(1stEd).jpg",
+        "author": "Ursula K. Le Guin",
+        "description": "Ged was the greatest sorcerer in Earthsea, but in his youth he was the reckless Sparrowhawk. In his hunger for power and knowledge, he tampered with long-held secrets and loosed a terrible shadow upon the world. This is the tumultuous tale of his testing, how he mastered the mighty words of power, tamed an ancient dragon, and crossed death's threshold to restore the balance.",
+        "year": 1968,
+        "buy_url": "https://www.amazon.com/Wizard-Earthsea-DJ-Ursula-Guin/dp/B007BP7HQC/ref=sr_1_2?ie=UTF8&qid=1479660273&sr=8-2",
+        "genre": "fantasy"
+    },
+    {
+        "title": "Harry Potter and the Philosopher's Stone",
+        "cover_url": "https://upload.wikimedia.org/wikipedia/en/6/6b/Harry_Potter_and_the_Philosopher%27s_Stone_Book_Cover.jpg",
+        "cover_url_attribution": "https://en.wikipedia.org/wiki/File:Harry_Potter_and_the_Philosopher%27s_Stone_Book_Cover.jpg",
+        "author": "J. K. Rowling",
+        "description": "What did Harry Potter know about magic? He was stuck living with the decidedly un-magical Dursleys, who hated him. He slept in a closet and ate their leftovers. But an owl messenger changes all that, with an invitation to attend the Hogwarts School for Wizards and Witches, where it turns out Harry is already famous...",
+        "year": 1997,
+        "buy_url": "https://www.amazon.com/Harry-Potter-Sorcerers-Stone-Illustrated/dp/0545790352/ref=sr_1_1?ie=UTF8&qid=1479660501&sr=8-1&keywords=Harry+Potter+and+the+Philosopher%27s+Stone+hardcover",
+        "genre": "fantasy"
+    },
+    {
+        "title": "War and Peace",
+        "cover_url": "https://upload.wikimedia.org/wikipedia/commons/a/af/Tolstoy_-_War_and_Peace_-_first_edition%2C_1869.jpg",
+        "cover_url_attribution": "https://commons.wikimedia.org/wiki/File:Tolstoy_-_War_and_Peace_-_first_edition,_1869.jpg",
+        "author": "Leo Tolstoy",
+        "description": "War and Peace is considered one of the world’s greatest works of fiction. It is regarded, along with Anna Karenina, as Tolstoy’s finest literary achievement. Epic in scale, War and Peace delineates in graphic detail events leading up to Napoleon’s invasion of Russia, and the impact of the Napoleonic era on Tsarist society, as seen through the eyes of five Russian aristocratic families.",
+        "year": 1869,
+        "buy_url": "https://www.amazon.com/War-Peace-Set-Leo-Tolstoy/dp/0679405739/ref=sr_1_1?ie=UTF8&qid=1479658156&sr=8-1",
+        "genre": "classic"
+    },
+    {
+        "title": "Moby-Dick; or, The Whale",
+        "cover_url": "https://upload.wikimedia.org/wikipedia/commons/3/36/Moby-Dick_FE_title_page.jpg",
+        "cover_url_attribution": "https://commons.wikimedia.org/wiki/File:Moby-Dick_FE_title_page.jpg",
+        "author": "Herman Melville",
+        "description": "Ishmael, a sailor, finds his way onto a whaling vessel, one that is captained by Ahab, a stubborn man on a quest to destroy the whale that 'took' his leg in a battle. Despite a highly credible prophesy and evidence that any pursuit of Moby Dick will end in death, Ahab becomes fanatical about getting revenge. Crew members fall ill and turn mad, but nothing incites doubt in the mind of the captain.",
+        "year": 1851,
+        "buy_url": "https://www.amazon.com/Moby-Dick-Macmillan-Collectors-Library-Melville/dp/1509826645/ref=sr_1_1?ie=UTF8&qid=1479660058&sr=8-1",
+        "genre": "classic"
+    },
+    {
+        "title": "Hyperion",
+        "cover_url": "https://upload.wikimedia.org/wikipedia/en/7/73/Hyperion_cover.jpg",
+        "cover_url_attribution": "https://en.wikipedia.org/wiki/File:Hyperion_cover.jpg",
+        "author": "Dan Simmons",
+        "description": "On the world called Hyperion, beyond the law of the Hegemony of Man, there waits the creature called the Shrike.  There are those who worship it.  There are those who fear it.  And there are those who have vowed to destroy it.  In the Valley of the Time Tombs, where huge, brooding structures move backward through time, the Shrike waits for them all.  On the eve of Armageddon, with the entire galaxy at war, seven pilgrims set forth on a final voyage to Hyperion seeking the answers to the unsolved riddles of their lives.  Each carries a desperate hope--and a terrible secret.  And one may hold the fate of humanity in his hands.",
+        "year": 1989,
+        "buy_url": "https://www.amazon.com/Hyperion-Dan-Simmons/dp/0747202435/ref=sr_1_2?ie=UTF8&qid=1479662895&sr=8-2&keywords=hyperion+hardcover",
+        "genre": "science fiction"
+    }
+]
