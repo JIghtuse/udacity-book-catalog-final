@@ -3,6 +3,7 @@
 import logging
 import re
 from flask import Flask, render_template, request, redirect, url_for, abort
+from flask import jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from common import DATABASE_FILENAME
@@ -53,6 +54,13 @@ def show_genre(genre):
     return render_template('genre.html',
                            genre=genre,
                            genre_books=genre_books)
+
+
+@app.route('/genre/<string:genre>/json')
+def show_genre_json(genre):
+    genre = session.query(Genre).filter_by(name=genre).one()
+    genre_books = session.query(Book).filter_by(genre_id=genre.id)
+    return jsonify(books=[book.serialize for book in genre_books])
 
 
 @app.route('/genre/<string:genre>/new-book')

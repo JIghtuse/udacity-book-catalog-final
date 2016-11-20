@@ -34,6 +34,18 @@ class Book(Base):
     def build_url(self):
         return "{}-{}".format(self.id, self.title.replace(' ', '-'))
 
+    @property
+    def serialize(self):
+        return {'id': self.id,
+                'title': self.title,
+                'cover_url': self.cover_url,
+                'cover_url_attribution': self.cover_url_attribution,
+                'description': self.description,
+                'author': self.author,
+                'year': self.year,
+                'buy_url': self.buy_url,
+                'genre': self.genre.name}
+
 
 def main():
     # will create a new database
