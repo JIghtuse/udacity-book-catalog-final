@@ -4,7 +4,7 @@
     <h2>{{book.title}}</h2>
     <p>Are you sure you want to delete this book?</p>
     <form method="POST">
-        <button type="button" class="cancel-button">Cancel</button>
+        <button type="button" class="cancel-button" onclick="location.href='{{url_for('show_homepage')}}'">Cancel</button>
         <button type="submit">Delete</button>
     </form>
 </div>
