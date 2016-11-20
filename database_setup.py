@@ -15,6 +15,12 @@ class Genre(Base):
     name = Column(String(80), nullable=False)
     description = Column(String(250))
 
+    @property
+    def serialize(self):
+        return {'id': self.id,
+                'name': self.name,
+                'description': self.description}
+
 
 class Book(Base):
     __tablename__ = 'book'

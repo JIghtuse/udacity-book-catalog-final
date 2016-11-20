@@ -47,6 +47,14 @@ def show_homepage():
                            genres=genres, recent_books=recent_books)
 
 
+@app.route('/json')
+def show_homepage_json():
+    genres = session.query(Genre).all()
+    recent_books = session.query(Book).limit(10)
+    return jsonify(genres=[genre.serialize for genre in genres],
+                   recent_books=[book.serialize for book in recent_books])
+
+
 @app.route('/genre/<string:genre>/')
 def show_genre(genre):
     genre = session.query(Genre).filter_by(name=genre).one()
@@ -115,6 +123,14 @@ def show_book(book_title):
     if book is None:
         return abort(404)
     return render_template('book.html', book=book)
+
+
+@app.route('/book/<string:book_title>/json')
+def show_book_json(book_title):
+    book = get_book_by_title(book_title)
+    if book is None:
+        return abort(404)
+    return jsonify(book=book.serialize)
 
 
 @app.route('/book/<string:book_title>', methods=["POST"])
