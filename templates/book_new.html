@@ -35,8 +35,14 @@
             <label for="book-buy-url">Buy URL</label>
             <input type="url" name="book-buy-url" id="book-buy-url" class="form-control">
         </div class="form-group">
-        <button type="button" class="cancel-button btn btn-default form-control" onclick="location.href='{{url_for('show_homepage')}}'">Cancel</button>
-        <button type="submit" class="btn btn-primary form-control">Submit</button>
+        <button type="button" class="cancel-button btn btn-default form-control" onclick="location.href='{{url_for('show_homepage')}}'">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+            Cancel
+        </button>
+        <button type="submit" class="btn btn-primary form-control">
+            <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+            Submit
+        </button>
         <div>
     </form>
 </div>
