@@ -178,6 +178,11 @@ def show_edit_book(book_title):
         return render_template('book_edit.html', book=book)
 
 
+@app.route('/login')
+def show_login():
+    return ""
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
