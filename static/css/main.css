@@ -6,6 +6,10 @@ h1, h2, footer {
     text-align: center;
 }
 
+h2 {
+    border-bottom: 1px solid;
+}
+
 footer {
     margin-top: 3em;
 }

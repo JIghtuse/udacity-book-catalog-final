@@ -3,6 +3,7 @@
 <div class="book-info">
     <h2>{{book.title}}</h2>
     <img src="{{book.cover_url}}" class="book-cover-image" alt="book cover">
+    <p>Image taken from <a href="{{book.cover_url_attribution}}">Wikipedia</a>.</p>
     <p class="book-description">{{book.description}}</p>
     <div class="book-metadata">
         <p>Genre: {{book.genre.name}}</p>
