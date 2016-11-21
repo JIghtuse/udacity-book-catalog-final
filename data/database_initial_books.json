@@ -70,6 +70,16 @@
         "year": 1989,
         "buy_url": "https://www.amazon.com/Hyperion-Dan-Simmons/dp/0747202435/ref=sr_1_2?ie=UTF8&qid=1479662895&sr=8-2&keywords=hyperion+hardcover",
         "genre": "science fiction"
+    },
+    {
+        "title": "Way Station",
+        "cover_url": "https://upload.wikimedia.org/wikipedia/en/3/31/Way_Station.jpg",
+        "cover_url_attribution": "https://en.wikipedia.org/wiki/File:Way_Station.jpg",
+        "author": "Clifford D. Simak",
+        "description": "Enoch Wallace is not like other humans. Living a secluded life in the backwoods of Wisconsin, he carries a nineteenth-century rifle and never seems to age—a fact that has recently caught the attention of prying government eyes. The truth is, Enoch is the last surviving veteran of the American Civil War and, for close to a century, he has operated a secret way station for aliens passing through on journeys to other stars.",
+        "year": 1963,
+        "buy_url": "https://www.amazon.com/Way-Station-clifford-simak/dp/B000GQ0576/ref=sr_1_2?ie=UTF8&qid=1479746935&sr=8-2",
+        "genre": "science fiction"
     }
 ]
 }
