@@ -11,6 +11,12 @@
     <body>
         <div class="content container">
             <h1><a href="{{url_for('show_homepage')}}">Book catalog</a></h1>
+            <div class="login-logout">
+                <a href="{{url_for('show_login')}}" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    Log in
+                </a>
+            </div>
             {% block content %}
             {% endblock %}
             <footer>
