@@ -30,3 +30,7 @@ footer {
 .book-description, .genre-description {
     text-align: justify;
 }
+
+.login-logout {
+    text-align: right;
+}
