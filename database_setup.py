@@ -22,6 +22,15 @@ class Genre(Base):
                 'description': self.description}
 
 
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(80), nullable=False)
+    email = Column(String(80), nullable=False)
+    picture = Column(String(250), nullable=False)
+
+
 class Book(Base):
     __tablename__ = 'book'
 
@@ -36,6 +45,8 @@ class Book(Base):
     buy_url = Column(String(250))
     genre_id = Column(Integer, ForeignKey('genre.id'))
     genre = relationship(Genre)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
     def build_url(self):
         return "{}-{}".format(self.id, self.title.replace(' ', '-'))
@@ -50,7 +61,8 @@ class Book(Base):
                 'author': self.author,
                 'year': self.year,
                 'buy_url': self.buy_url,
-                'genre': self.genre.name}
+                'genre': self.genre.name,
+                'user': self.user.name}
 
 
 def main():

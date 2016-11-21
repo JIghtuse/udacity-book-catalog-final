@@ -3,7 +3,7 @@ import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from common import DATABASE_FILENAME
-from database_setup import Base, Genre, Book
+from database_setup import Base, Genre, Book, User
 
 
 def parse_json_objects_data(filename, root):
@@ -32,7 +32,7 @@ def load_genres(filename):
             continue
 
 
-def load_books(filename, genres, session):
+def load_books(filename, genres, session, importer):
     books_data = parse_json_objects_data(filename, 'books')
     for book_data in books_data:
         genre_name = book_data.get('genre')
@@ -46,9 +46,13 @@ def load_books(filename, genres, session):
                                                                  book_data))
             continue
 
+        if book_data['user'] != importer.name:
+            continue
         genre = genre_query.one()
         book_data['genre'] = genre
         book_data['genre_id'] = genre.id
+        book_data['user'] = importer
+        book_data['user_id'] = importer.id
         try:
             book = Book(**book_data)
             yield book
@@ -64,6 +68,10 @@ def main():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
+    importer = User(name="Importer", email="nobody@example.com", picture="")
+    session.add(importer)
+    session.commit()
+
     number_of_genres = session.query(Genre).count()
     if number_of_genres:
         # Do not insert data second time
@@ -74,7 +82,8 @@ def main():
         session.add(genre)
     session.commit()
 
-    books = load_books("data/database_initial_books.json", genres, session)
+    books = load_books("data/database_initial_books.json",
+                       genres, session, importer)
     for book in books:
         session.add(book)
     session.commit()
