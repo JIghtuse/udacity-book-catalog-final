@@ -6,7 +6,7 @@ from common import DATABASE_FILENAME
 from database_setup import Base, Genre, Book
 
 
-def parse_json_objects_data(filename):
+def parse_json_objects_data(filename, root):
     objects_data = []
     with open(filename) as objects_file:
         try:
@@ -15,14 +15,14 @@ def parse_json_objects_data(filename):
             logging.critical("Cannot get objects data: {}".format(e))
             return objects_data
 
-        for object_data in data:
+        for object_data in data[root]:
             objects_data.append(object_data)
 
     return objects_data
 
 
 def load_genres(filename):
-    genres_data = parse_json_objects_data(filename)
+    genres_data = parse_json_objects_data(filename, 'genres')
     for genre_data in genres_data:
         try:
             genre = Genre(**genre_data)
@@ -33,7 +33,7 @@ def load_genres(filename):
 
 
 def load_books(filename, genres, session):
-    books_data = parse_json_objects_data(filename)
+    books_data = parse_json_objects_data(filename, 'books')
     for book_data in books_data:
         genre_name = book_data.get('genre')
         if genre_name is None:

@@ -1,3 +1,5 @@
+{
+    "genres":
 [
     {"name": "comedy",
      "description": "Books intended to be humorous or amusing by inducing laughter"},
@@ -13,3 +15,4 @@
     {"name": "science fiction",
     "description": "Genre of speculative fiction typically dealing with imaginative concepts such as futuristic science and technology, space travel, time travel, faster than light travel, parallel universes, and extraterrestrial life."}
 ]
+}
