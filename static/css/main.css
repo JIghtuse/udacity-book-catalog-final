@@ -1,0 +1,28 @@
+body {
+    background-color: #eee;
+}
+
+h1, h2, footer {
+    text-align: center;
+}
+
+footer {
+    margin-top: 3em;
+}
+
+.content {
+    border-radius: 5em;
+    background-color: #fff;
+    max-width: 60em;
+}
+
+.book-cover-image {
+    max-height: 30em;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+}
+
+.book-description, .genre-description {
+    text-align: justify;
+}
