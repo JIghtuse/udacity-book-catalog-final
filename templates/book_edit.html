@@ -37,7 +37,7 @@
             <input type="url" name="book-buy-url" id="book-buy-url" value="{{book.buy_url}}" class="form-control">
         </div>
         <div class="form-group">
-            <button type="button" class="cancel-button form-control btn btn-default" onclick="location.href='{{url_for('show_homepage')}}'">
+            <button type="button" class="cancel-button form-control btn btn-default" onclick="location.href='{{url_for('show_book', book_title=book.build_url())}}'">
                 <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
                 Cancel
             </button>

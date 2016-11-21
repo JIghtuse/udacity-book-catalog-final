@@ -5,7 +5,7 @@
     <p>Are you sure you want to delete this book?</p>
     <form method="POST">
         <div class="form-group">
-            <button type="button" class="cancel-button form-control btn btn-default" onclick="location.href='{{url_for('show_homepage')}}'">
+            <button type="button" class="cancel-button form-control btn btn-default" onclick="location.href='{{url_for('show_book', book_title=book.build_url())}}'">
                 <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
                 Cancel
             </button>
