@@ -3,15 +3,17 @@
 import logging
 import re
 from flask import Flask, render_template, request, redirect, url_for, abort
-from flask import jsonify
+from flask import jsonify, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from common import DATABASE_FILENAME
 from database_setup import Base, Genre, Book
+from secret import FLASH_SECRET
 
 BOOK_TITLE_RE = re.compile(r'^[-0-9a-zA-Z,;. ]*$')
 
 app = Flask(__name__)
+app.secret_key = FLASH_SECRET
 
 engine = create_engine("sqlite:///" + DATABASE_FILENAME)
 Base.metadata.bind = engine
@@ -114,6 +116,7 @@ def add_book_post_handler(genre):
     book = Book(**book_args)
     session.add(book)
     session.commit()
+    flash("Book successfully added")
     return redirect(url_for('show_book', book_title=book.build_url()))
 
 
@@ -153,6 +156,7 @@ def show_delete_book(book_title):
     if request.method == 'POST':
         session.delete(book)
         session.commit()
+        flash("Book successfully deleted")
         return redirect(url_for('show_homepage'))
     else:
         return render_template('book_delete.html', book=book)
@@ -173,6 +177,7 @@ def show_edit_book(book_title):
 
         session.add(book)
         session.commit()
+        flash("Book successfully updated")
         return redirect(url_for('show_book', book_title=book.build_url()))
     else:
         return render_template('book_edit.html', book=book)
