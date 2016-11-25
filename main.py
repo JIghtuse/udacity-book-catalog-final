@@ -10,7 +10,7 @@ from common import DATABASE_FILENAME
 from database_setup import Base, Genre, Book
 from secret import FLASH_SECRET
 
-BOOK_TITLE_RE = re.compile(r'^[-0-9a-zA-Z,;. ]*$')
+BOOK_TITLE_RE = re.compile(r'^[\w\d,;. ]*$', re.UNICODE)
 
 app = Flask(__name__)
 app.secret_key = FLASH_SECRET
