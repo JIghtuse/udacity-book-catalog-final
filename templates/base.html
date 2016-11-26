@@ -14,16 +14,26 @@
         <div class="content container">
             <h1><a href="{{url_for('show_homepage')}}">Book catalog</a></h1>
             <div class="login-logout">
-                <a href="{{url_for('show_login')}}" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                    Log in
-                </a>
+                {% if login_session['user'] %}
+                    <div class="username">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        {{login_session['user']}}
+                        <a href="{{url_for('logout', provider=login_session['provider'])}}" class="btn btn-default">
+                            Log out
+                            </a>
+                    </div>
+                {% else %}
+                    <a href="{{url_for('show_login')}}" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        Log in
+                    </a>
+                {% endif %}
             </div>
-            {% with messages = get_flashed_messages() %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     <ul class="flashes">
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
+                    {% for category, message in messages %}
+                        <li class="flash-{{ category }}">{{ message }}</li>
                     {% endfor %}
                     </ul>
                 {% endif %}

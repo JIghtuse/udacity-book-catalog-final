@@ -2,7 +2,7 @@
 {% block content %}
 <ul class="oauth-provider-list">
     {% for provider in providers: %}
-    <li><a class="btn btn-block btn-social btn-{{provider}}" href="/login/{{provider}}"><span class="fa fa-{{provider}}"></span>Sign in with {{provider}}</a></li>
+    <li><a class="btn btn-block btn-social btn-{{provider.name}}" href="{{provider.auth_url}}"><span class="fa fa-{{provider.name}}"></span>Sign in with {{provider.name}}</a></li>
     {% endfor %}
 </ul>
 {% endblock %}

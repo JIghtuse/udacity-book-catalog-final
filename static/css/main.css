@@ -34,3 +34,11 @@ footer {
 .login-logout {
     text-align: right;
 }
+
+.flash-error {
+    color: red;
+}
+
+.flash-message {
+    color: blue;
+}

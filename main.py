@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
 
+import json
 import logging
+import random
+import string
 import re
+from urllib.parse import urlencode
 from flask import Flask, render_template, request, redirect, url_for, abort
-from flask import jsonify, flash
+from flask import jsonify, flash, make_response
+from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from common import DATABASE_FILENAME
 from database_setup import Base, Genre, Book
 from secrets import FLASH_SECRET
 from oauth import OAUTH_PROVIDER_DATA
+import requests
+from requests.auth import HTTPBasicAuth
 
+USERAGENT = "udacity-book-catalog 0.1"
 BOOK_TITLE_RE = re.compile(r'^[\w\d,;. ]*$', re.UNICODE)
 
 app = Flask(__name__)
@@ -47,7 +55,8 @@ def show_homepage():
     genres = session.query(Genre).all()
     recent_books = session.query(Book).limit(10)
     return render_template('homepage.html',
-                           genres=genres, recent_books=recent_books)
+                           genres=genres, recent_books=recent_books,
+                           login_session=login_session)
 
 
 @app.route('/json')
@@ -64,7 +73,8 @@ def show_genre(genre):
     genre_books = session.query(Book).filter_by(genre_id=genre.id)
     return render_template('genre.html',
                            genre=genre,
-                           genre_books=genre_books)
+                           genre_books=genre_books,
+                           login_session=login_session)
 
 
 @app.route('/genre/<string:genre>/json')
@@ -76,7 +86,8 @@ def show_genre_json(genre):
 
 @app.route('/genre/<string:genre>/new-book')
 def show_add_book(genre):
-    return render_template('book_new.html', genre_name=genre)
+    return render_template('book_new.html', genre_name=genre,
+                           login_session=login_session)
 
 
 def validate_fields():
@@ -126,7 +137,7 @@ def show_book(book_title):
     book = get_book_by_title(book_title)
     if book is None:
         return abort(404)
-    return render_template('book.html', book=book)
+    return render_template('book.html', book=book, login_session=login_session)
 
 
 @app.route('/book/<string:book_title>/json')
@@ -151,6 +162,9 @@ def book_post_handler(book_title):
 
 @app.route('/book/<string:book_title>/delete', methods=["GET", "POST"])
 def show_delete_book(book_title):
+    if 'user' not in login_session:
+        flash("Please login to delete books", 'error')
+        return redirect(url_for('show_login'))
     book = get_book_by_title(book_title)
     if book is None:
         return abort(404)
@@ -160,11 +174,15 @@ def show_delete_book(book_title):
         flash("Book successfully deleted")
         return redirect(url_for('show_homepage'))
     else:
-        return render_template('book_delete.html', book=book)
+        return render_template('book_delete.html', book=book,
+                               login_session=login_session)
 
 
 @app.route('/book/<string:book_title>/edit', methods=["GET", "POST"])
 def show_edit_book(book_title):
+    if 'user' not in login_session:
+        flash("Please login to edit books", 'error')
+        return redirect(url_for('show_login'))
     book = get_book_by_title(book_title)
     if book is None:
         return abort(404)
@@ -181,22 +199,158 @@ def show_edit_book(book_title):
         flash("Book successfully updated")
         return redirect(url_for('show_book', book_title=book.build_url()))
     else:
-        return render_template('book_edit.html', book=book)
+        return render_template('book_edit.html', book=book,
+                               login_session=login_session)
+
+
+def make_auth_url(provider_name, provider_data):
+    state = ''.join(
+        random.choice(string.ascii_uppercase + string.digits)
+        for _ in range(32))
+    login_session[provider_name] = {'state': state}
+    params = {
+        "client_id": provider_data['client_id'],
+        "response_type": "code",
+        "state": state,
+        "redirect_uri": provider_data['redirect_uri'],
+        "duration": "temporary",
+        "scope": provider_data['scope'],
+    }
+    url = provider_data['auth_url'] + urlencode(params)
+    return url
 
 
 @app.route('/login')
 def show_login():
-    providers = OAUTH_PROVIDER_DATA.keys()
-    return render_template('login.html', providers=providers)
+    providers = []
+    for provider in OAUTH_PROVIDER_DATA:
+        providers.append({
+            'name': provider,
+            'auth_url': make_auth_url(provider, OAUTH_PROVIDER_DATA[provider])
+        })
+    return render_template('login.html', providers=providers,
+                           login_session=login_session)
 
 
-@app.route('/login/<provider>')
-def show_login_provider(provider):
-    logging.warning("Logging in with {}".format(provider))
-    provider_data = OAUTH_PROVIDER_DATA.get(provider)
-    if provider_data is None:
-        return abort(404)
-    return str(provider_data)
+@app.route('/logout/<provider>')
+def logout(provider):
+    access_token = login_session[provider]['access_token']
+    if access_token is None:
+        return make_json_response("Current user not connected", 401)
+
+    if provider not in OAUTH_PROVIDER_DATA:
+        logging.warning("Missing provider {}".format(provider))
+        return make_json_response("No such provider", 500)
+
+    provider_data = OAUTH_PROVIDER_DATA[provider]
+
+    headers = {
+        "User-agent": USERAGENT,
+    }
+
+    if provider_data['revoke_method'] == 'GET':
+        request_url = provider_data['revoke_url'] + "token=" + access_token
+        response = requests.get(request_url, headers=headers)
+    else:
+        client_auth = HTTPBasicAuth(provider_data['client_id'],
+                                    provider_data['client_secret'])
+
+        headers = {
+            "Accept": "application/json",
+        }
+        post_data = {
+            "token": login_session[provider]['access_token'],
+        }
+
+        response = requests.post(
+            provider_data['revoke_url'],
+            data=post_data,
+            auth=client_auth,
+            headers=headers)
+
+    if response.status_code == 200 or response.status_code == 204:
+        login_session[provider].clear()
+        del login_session[provider]
+        del login_session['user']
+
+        flash("Logout successful")
+        return redirect(url_for('show_homepage'))
+    else:
+        logging.warning(response.text)
+        return make_json_response("Failed to revoke token for given user", 400)
+
+
+def get_oauth_token(provider_data, code):
+    client_auth = HTTPBasicAuth(provider_data['client_id'],
+                                provider_data['client_secret'])
+    post_data = {
+        "code": code,
+        "redirect_uri": provider_data['redirect_uri'],
+        "grant_type": "authorization_code",
+    }
+
+    headers = {
+        "Accept": "application/json",
+    }
+
+    response = requests.post(
+        provider_data['access_token_url'],
+        auth=client_auth,
+        data=post_data,
+        headers=headers)
+
+    token_json = response.json()
+    if 'error' in token_json:
+        return None
+    return token_json["access_token"]
+
+
+def make_json_response(data, return_code):
+    response = make_response(json.dumps(data), return_code)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+
+# Gets user name and email from oauth
+def retrieve_userinfo(token, provider_name, provider_data):
+    headers = {
+        "Authorization": provider_data['auth_header_name'] + " " + token,
+        "User-agent": USERAGENT,
+    }
+    request_url = provider_data['oauth_url'] + provider_data['user_request']
+    response = requests.get(request_url, headers=headers)
+    user_json = response.json()
+    if 'email' in user_json:
+        login_session[provider_name]['email'] = user_json['email']
+
+    username_field = provider_data['user_name_field']
+    login_session[provider_name]['id'] = user_json['id']
+    login_session[provider_name]['access_token'] = token
+    login_session['provider'] = provider_name
+    login_session['user'] = user_json[username_field]
+
+
+@app.route('/callback/<provider>')
+def sign_in_with_provider(provider):
+    if provider not in OAUTH_PROVIDER_DATA:
+        logging.warning("Missing provider {}".format(provider))
+        return make_json_response("No such provider", 500)
+
+    provider_data = OAUTH_PROVIDER_DATA[provider]
+
+    if request.args.get('state') != login_session[provider]['state']:
+        return make_json_response("Invalid state parameter", 401)
+
+    code = request.args.get('code')
+    token = get_oauth_token(provider_data, code)
+    if token is None:
+        logging.warning("Failed obtaining access token")
+        return make_json_response("Cannot obtain oauth token", 500)
+
+    retrieve_userinfo(token, provider, provider_data)
+    flash("You are now logged in as {}".format(login_session['user']))
+
+    return redirect(url_for('show_homepage'))
 
 
 @app.errorhandler(404)
