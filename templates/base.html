@@ -16,7 +16,11 @@
             <div class="login-logout">
                 {% if login_session['user'] %}
                     <div class="username">
-                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        {% if login_session['avatar'] %}
+                            <img src="{{login_session['avatar']}}" class="avatar">
+                        {% else %}
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        {% endif %}
                         {{login_session['user']}}
                         <a href="{{url_for('logout', provider=login_session['provider'])}}" class="btn btn-default">
                             Log out

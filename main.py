@@ -5,6 +5,7 @@ import logging
 import random
 import string
 import re
+import hashlib
 from urllib.parse import urlencode
 from flask import Flask, render_template, request, redirect, url_for, abort
 from flask import jsonify, flash, make_response
@@ -12,7 +13,7 @@ from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from common import DATABASE_FILENAME
-from database_setup import Base, Genre, Book
+from database_setup import Base, Genre, Book, User
 from secrets import FLASH_SECRET
 from oauth import OAUTH_PROVIDER_DATA
 import requests
@@ -63,6 +64,8 @@ def show_homepage():
 def show_homepage_json():
     genres = session.query(Genre).all()
     recent_books = session.query(Book).limit(10)
+    for book in session.query(Book).limit(10):
+        logging.warning(book.user)
     return jsonify(genres=[genre.serialize for genre in genres],
                    recent_books=[book.serialize for book in recent_books])
 
@@ -131,7 +134,7 @@ def add_book_post_handler(genre):
     form_is_valid, book_args = validate_fields()
     if not form_is_valid:
         return abort(400)
-    book = Book(**book_args)
+    book = Book(**book_args, user_id=login_session['user_id'])
     session.add(book)
     session.commit()
     flash("Book successfully added")
@@ -287,6 +290,9 @@ def logout(provider):
         login_session[provider].clear()
         del login_session[provider]
         del login_session['user']
+        del login_session['provider']
+        del login_session['user_id']
+        del login_session['avatar']
 
         flash("Logout successful")
         return redirect(url_for('show_homepage'))
@@ -326,7 +332,6 @@ def make_json_response(data, return_code):
     return response
 
 
-# Gets user name and email from oauth
 def retrieve_userinfo(token, provider_name, provider_data):
     headers = {
         "Authorization": provider_data['auth_header_name'] + " " + token,
@@ -343,6 +348,12 @@ def retrieve_userinfo(token, provider_name, provider_data):
     login_session[provider_name]['access_token'] = token
     login_session['provider'] = provider_name
     login_session['user'] = user_json[username_field]
+
+    user_id = get_user_by_provider(login_session)
+    if not user_id:
+        user_id = create_user(login_session)
+    login_session['user_id'] = user_id
+    login_session['user_id'] = user_id
 
 
 @app.route('/callback/<provider>')
@@ -366,6 +377,47 @@ def sign_in_with_provider(provider):
     flash("You are now logged in as {}".format(login_session['user']))
 
     return redirect(url_for('show_homepage'))
+
+
+def create_user(login_session):
+    user_provider = login_session['provider']
+    user_email = login_session[user_provider].get('email')
+    user_provider_id = login_session[user_provider]['id']
+    if user_email is not None:
+        gravatar_url = "https://www.gravatar.com/avatar/"
+        gravatar_url += hashlib.md5(user_email.lower().encode('utf-8')).hexdigest() + "?"
+        user = User(name=login_session['user'],
+                    provider=user_provider,
+                    provider_id=user_provider_id,
+                    email=user_email,
+                    picture=gravatar_url)
+        login_session['avatar'] = gravatar_url
+    else:
+        user = User(name=login_session['user'],
+                    provider=user_provider,
+                    provider_id=user_provider_id)
+        login_session['avatar'] = None
+    session.add(user)
+    session.commit()
+    user = session.query(User).filter_by(
+        provider=user_provider,
+        provider_id=login_session[user_provider]['id']).one()
+    return user.id
+
+
+def get_user_by_id(user_id):
+    return session.query(User).filter_by(id=user_id).one()
+
+
+def get_user_by_provider(login_session):
+    try:
+        provider = login_session['provider']
+        user = session.query(User).filter_by(
+            provider=provider,
+            provider_id=login_session[provider]['id']).one()
+        return user.id
+    except:
+        return None
 
 
 @app.errorhandler(404)
