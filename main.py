@@ -353,7 +353,8 @@ def retrieve_userinfo(token, provider_name, provider_data):
     if not user_id:
         user_id = create_user(login_session)
     login_session['user_id'] = user_id
-    login_session['user_id'] = user_id
+    user = session.query(User).get(user_id)
+    login_session['avatar'] = user.picture
 
 
 @app.route('/callback/<provider>')
@@ -396,7 +397,6 @@ def create_user(login_session):
         user = User(name=login_session['user'],
                     provider=user_provider,
                     provider_id=user_provider_id)
-        login_session['avatar'] = None
     session.add(user)
     session.commit()
     user = session.query(User).filter_by(
