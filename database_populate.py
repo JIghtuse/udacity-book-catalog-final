@@ -68,7 +68,11 @@ def main():
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
-    importer = User(name="Importer", email="nobody@example.com", picture="")
+    importer = User(name="Importer",
+                    email="nobody@example.com",
+                    picture="https://www.gravatar.com/avatar/00000000000000000000000000000000",
+                    provider="local",
+                    provider_id="000")
     session.add(importer)
     session.commit()
 
