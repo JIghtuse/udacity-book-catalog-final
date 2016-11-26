@@ -86,6 +86,9 @@ def show_genre_json(genre):
 
 @app.route('/genre/<string:genre>/new-book')
 def show_add_book(genre):
+    if 'user' not in login_session:
+        flash("Please login to add new books", 'error')
+        return redirect(url_for('show_login'))
     return render_template('book_new.html', genre_name=genre,
                            login_session=login_session)
 
@@ -122,6 +125,9 @@ def validate_fields():
 
 @app.route('/genre/<string:genre>/new-book', methods=["POST"])
 def add_book_post_handler(genre):
+    if 'user' not in login_session:
+        flash("Please login to add new books", 'error')
+        return redirect(url_for('show_login'))
     form_is_valid, book_args = validate_fields()
     if not form_is_valid:
         return abort(400)
