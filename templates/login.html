@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<ul class="oauth-provider-list">
+    {% for provider in providers: %}
+    <li><a class="btn btn-block btn-social btn-{{provider}}" href="/login/{{provider}}"><span class="fa fa-{{provider}}"></span>Sign in with {{provider}}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -8,7 +8,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from common import DATABASE_FILENAME
 from database_setup import Base, Genre, Book
-from secret import FLASH_SECRET
+from secrets import FLASH_SECRET
+from oauth import OAUTH_PROVIDER_DATA
 
 BOOK_TITLE_RE = re.compile(r'^[\w\d,;. ]*$', re.UNICODE)
 
@@ -185,7 +186,17 @@ def show_edit_book(book_title):
 
 @app.route('/login')
 def show_login():
-    return ""
+    providers = OAUTH_PROVIDER_DATA.keys()
+    return render_template('login.html', providers=providers)
+
+
+@app.route('/login/<provider>')
+def show_login_provider(provider):
+    logging.warning("Logging in with {}".format(provider))
+    provider_data = OAUTH_PROVIDER_DATA.get(provider)
+    if provider_data is None:
+        return abort(404)
+    return str(provider_data)
 
 
 @app.errorhandler(404)
