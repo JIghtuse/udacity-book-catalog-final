@@ -258,7 +258,7 @@ def logout(provider):
         if provider_data['revoke_method'] == 'GET':
             request_url = provider_data['revoke_url'] + "token=" + access_token
             response = requests.get(request_url, headers=headers)
-        else:
+        elif provider_data['revoke_method'] == 'POST':
             client_auth = HTTPBasicAuth(provider_data['client_id'],
                                         provider_data['client_secret'])
 
@@ -274,6 +274,10 @@ def logout(provider):
                 data=post_data,
                 auth=client_auth,
                 headers=headers)
+        else:
+            response = requests.Response()
+            response.status_code = 200
+
     except requests.exceptions.ConnectionError as e:
         flash(str(e), 'error')
         logging.exception("Failed logout")

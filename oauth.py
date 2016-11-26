@@ -20,6 +20,9 @@ OAUTH_PROVIDER_DATA = {
         'access_token_url': "https://github.com/login/oauth/access_token",
         'oauth_url': "https://api.github.com/",
         'redirect_uri': "http://localhost:8888/callback/github",
+        # TODO: find revoke for github
+        'revoke_url': "",
+        'revoke_method': 'NONE',
         'client_id': OAUTH_PROVIDER_SECRETS['github']['client_id'],
         'client_secret': OAUTH_PROVIDER_SECRETS['github']['client_secret'],
         'user_request': 'user',
