@@ -254,25 +254,30 @@ def logout(provider):
         "User-agent": USERAGENT,
     }
 
-    if provider_data['revoke_method'] == 'GET':
-        request_url = provider_data['revoke_url'] + "token=" + access_token
-        response = requests.get(request_url, headers=headers)
-    else:
-        client_auth = HTTPBasicAuth(provider_data['client_id'],
-                                    provider_data['client_secret'])
+    try:
+        if provider_data['revoke_method'] == 'GET':
+            request_url = provider_data['revoke_url'] + "token=" + access_token
+            response = requests.get(request_url, headers=headers)
+        else:
+            client_auth = HTTPBasicAuth(provider_data['client_id'],
+                                        provider_data['client_secret'])
 
-        headers = {
-            "Accept": "application/json",
-        }
-        post_data = {
-            "token": login_session[provider]['access_token'],
-        }
+            headers = {
+                "Accept": "application/json",
+            }
+            post_data = {
+                "token": login_session[provider]['access_token'],
+            }
 
-        response = requests.post(
-            provider_data['revoke_url'],
-            data=post_data,
-            auth=client_auth,
-            headers=headers)
+            response = requests.post(
+                provider_data['revoke_url'],
+                data=post_data,
+                auth=client_auth,
+                headers=headers)
+    except requests.exceptions.ConnectionError as e:
+        flash(str(e), 'error')
+        logging.exception("Failed logout")
+        return redirect(url_for('show_homepage'))
 
     if response.status_code == 200 or response.status_code == 204:
         login_session[provider].clear()
