@@ -422,7 +422,7 @@ def get_user_by_provider(login_session):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('404.html', login_session=login_session), 404
 
 
 if __name__ == "__main__":
