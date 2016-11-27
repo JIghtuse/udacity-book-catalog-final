@@ -41,7 +41,7 @@ class Book(Base):
 
     cover_url = Column(String(250))
     cover_url_attribution = Column(String(250))
-    description = Column(String(250))
+    description = Column(String(1000))
     author = Column(String(80))
     year = Column(Integer)
     buy_url = Column(String(250))
