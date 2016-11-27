@@ -12,7 +12,7 @@ from flask import jsonify, flash, make_response
 from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from common import DATABASE_FILENAME
+from common import DATABASE_PATH
 from database_setup import Base, Genre, Book, User
 from secrets import FLASH_SECRET
 from oauth import OAUTH_PROVIDER_DATA
@@ -25,7 +25,7 @@ BOOK_TITLE_RE = re.compile(r'^[\w\d,;. ]*$', re.UNICODE)
 app = Flask(__name__)
 app.secret_key = FLASH_SECRET
 
-engine = create_engine("sqlite:///" + DATABASE_FILENAME)
+engine = create_engine(DATABASE_PATH)
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)

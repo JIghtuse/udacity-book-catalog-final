@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
-from common import DATABASE_FILENAME
+from common import DATABASE_PATH
 
 
 Base = declarative_base()
@@ -69,7 +69,7 @@ class Book(Base):
 
 def main():
     # will create a new database
-    engine = create_engine("sqlite:///" + DATABASE_FILENAME)
+    engine = create_engine(DATABASE_PATH)
 
     # will add a tables in database representing Base derived classes
     Base.metadata.drop_all(engine)

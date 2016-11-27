@@ -1,1 +1,2 @@
 DATABASE_FILENAME = "book_catalog.db"
+DATABASE_PATH = "sqlite:///" + DATABASE_FILENAME

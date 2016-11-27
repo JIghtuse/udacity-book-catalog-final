@@ -2,7 +2,7 @@ import json
 import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from common import DATABASE_FILENAME
+from common import DATABASE_PATH
 from database_setup import Base, Genre, Book, User
 
 
@@ -62,7 +62,7 @@ def load_books(filename, genres, session, importer):
 
 
 def main():
-    engine = create_engine("sqlite:///" + DATABASE_FILENAME)
+    engine = create_engine(DATABASE_PATH)
 
     Base.metadata.bind = engine
     DBSession = sessionmaker(bind=engine)
