@@ -9,10 +9,12 @@ oauth providers you wish to use: Github, Google, Reddit.
 
 ## Installation and Running
 
-1. Clone this project source code from Github:
+1. Create project directory and launch installation script:
 
-        $ git clone https://github.com/JIghtuse/udacity-book-catalog-final.git
-        $ cd udacity-book-catalog-final
+        $ sudo mkdir /var/www/catalog
+        $ sudo chown $USER:$USER /var/www/catalog
+        $ sh install.sh
+        $ cd /var/www/catalog/
 
 2. Create API keys for oauth providers:
 
@@ -20,10 +22,11 @@ oauth providers you wish to use: Github, Google, Reddit.
         https://developers.google.com/identity/protocols/OAuth2
         https://www.reddit.com/prefs/apps
 
-3. Create secrets file with contents like:
+3. Create secrets.py file with contents like:
 
 
         FLASH_SECRET = "<insert random long string here>"
+        DB_SECRET = "<insert database password here>"
 
         OAUTH_PROVIDER_SECRETS = {
             'reddit': {
@@ -40,18 +43,49 @@ oauth providers you wish to use: Github, Google, Reddit.
             }
         }
 
-4. Set desired port number in `main.py` (it should correspond to ports you
-set when you created API keys).
 
-5. Now you can launch project. It will be served at http://localhost:<port>
+4. Modify oauth.py file lines with `redirect_uri` to match your server IP
+address, e.g:
 
-        $ python3 main.py
+        # ...
+        'google': {
+            # ...
+            'redirect_uri': "http://192.0.2.1/callback/google",
+            # ...
+        }
+        # ...
 
-6. To deploy app, you will need to change callback URLs to your server address.
+5. Create PostgreSQL database and user for application:
 
+        postgres=# create user catalog with password '<database password>';
+        postgres=# alter role catalog with login;
+        postgres=# alter role catalog createdb ;
+        postgres=# create database catalog with owner catalog;
+        postgres=# \c catalog
+        catalog=# revoke all on SCHEMA public from public;
+        catalog=# grant all on SCHEMA public to catalog;
+
+6. To run locally, user main.py script:
+
+        python3 main.py
+
+7. To run with apache, allow server to proxy connections to 5000 port:
+
+        <Location />
+                ProxyPass http://localhost:5000
+                ProxyPassReverse http://localhost:5000
+        </Location>
 
 ## Usage
 
 Non-authorized users can only see books and categories (both in JSON and HTML).
 
 Authorized users can create new books, edit and delete books.
+
+
+## Running instance
+
+There is a running instance of an app at the url http://35.160.212.183/
+
+NOTE: Google currently forbids using IP address for callback URL, so
+authorization with Google does not work on this machine.
