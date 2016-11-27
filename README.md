@@ -78,9 +78,9 @@ address, e.g:
 
 ## Usage
 
-Non-authorized users can only see books and categories (both in JSON and HTML).
+Non-authenticated users can only see books and categories (both in JSON and HTML).
 
-Authorized users can create new books, edit and delete books.
+Authenticated and authorized users can create new books, edit and delete their books.
 
 
 ## Running instance

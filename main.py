@@ -6,6 +6,7 @@ import random
 import string
 import re
 import hashlib
+from functools import wraps
 from urllib.parse import urlencode
 from flask import Flask, render_template, request, redirect, url_for, abort
 from flask import jsonify, flash, make_response
@@ -51,6 +52,17 @@ def get_book_by_title(book_title):
     return book.one()
 
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash("Please login to perform this action", 'error')
+            return redirect(url_for('show_login'))
+    return decorated_function
+
+
 @app.route('/')
 def show_homepage():
     genres = session.query(Genre).all()
@@ -86,10 +98,8 @@ def show_genre_json(genre):
 
 
 @app.route('/genre/<string:genre>/new-book')
+@login_required
 def show_add_book(genre):
-    if 'user' not in login_session:
-        flash("Please login to add new books", 'error')
-        return redirect(url_for('show_login'))
     return render_template('book_new.html', genre_name=genre,
                            login_session=login_session)
 
@@ -125,10 +135,8 @@ def validate_fields():
 
 
 @app.route('/genre/<string:genre>/new-book', methods=["POST"])
+@login_required
 def add_book_post_handler(genre):
-    if 'user' not in login_session:
-        flash("Please login to add new books", 'error')
-        return redirect(url_for('show_login'))
     form_is_valid, book_args = validate_fields()
     if not form_is_valid:
         return abort(400)
@@ -169,13 +177,14 @@ def book_post_handler(book_title):
 
 
 @app.route('/book/<string:book_title>/delete', methods=["GET", "POST"])
+@login_required
 def show_delete_book(book_title):
-    if 'user' not in login_session:
-        flash("Please login to delete books", 'error')
-        return redirect(url_for('show_login'))
     book = get_book_by_title(book_title)
     if book is None:
         return abort(404)
+    if book.user_id != login_session.get('user_id'):
+        flash("You should be author of this book entry to delete it", 'error')
+        return redirect(url_for('show_book', book_title=book.build_url()))
     if request.method == 'POST':
         session.delete(book)
         session.commit()
@@ -187,13 +196,14 @@ def show_delete_book(book_title):
 
 
 @app.route('/book/<string:book_title>/edit', methods=["GET", "POST"])
+@login_required
 def show_edit_book(book_title):
-    if 'user' not in login_session:
-        flash("Please login to edit books", 'error')
-        return redirect(url_for('show_login'))
     book = get_book_by_title(book_title)
     if book is None:
         return abort(404)
+    if book.user_id != login_session.get('user_id'):
+        flash("You should be author of this book entry to edit it", 'error')
+        return redirect(url_for('show_book', book_title=book.build_url()))
     if request.method == 'POST':
         form_is_valid, book_args = validate_fields()
         if not form_is_valid:
