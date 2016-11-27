@@ -6,6 +6,8 @@ PROJECT_DIR=/var/www/catalog
 mkdir -p "$PROJECT_DIR"
 cd "$PROJECT_DIR" || exit
 
+cp config/BookCatalog.conf /etc/apache2/sites-enabled/BookCatalog.conf
+
 git clone "$PROJECT_REPO" "$PROJECT_DIR"
 
 virtualenv venv
