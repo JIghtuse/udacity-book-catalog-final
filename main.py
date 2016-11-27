@@ -132,7 +132,8 @@ def add_book_post_handler(genre):
     form_is_valid, book_args = validate_fields()
     if not form_is_valid:
         return abort(400)
-    book = Book(**book_args, user_id=login_session['user_id'])
+    book_args['user_id'] = login_session['user_id']
+    book = Book(**book_args)
     session.add(book)
     session.commit()
     flash("Book successfully added")
@@ -342,7 +343,7 @@ def retrieve_userinfo(token, provider_name, provider_data):
         login_session[provider_name]['email'] = user_json['email']
 
     username_field = provider_data['user_name_field']
-    login_session[provider_name]['id'] = user_json['id']
+    login_session[provider_name]['id'] = str(user_json['id'])
     login_session[provider_name]['access_token'] = token
     login_session['provider'] = provider_name
     login_session['user'] = user_json[username_field]
@@ -399,7 +400,7 @@ def create_user(login_session):
     session.commit()
     user = session.query(User).filter_by(
         provider=user_provider,
-        provider_id=login_session[user_provider]['id']).one()
+        provider_id=user_provider_id).one()
     return user.id
 
 
