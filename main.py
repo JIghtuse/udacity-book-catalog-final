@@ -64,8 +64,6 @@ def show_homepage():
 def show_homepage_json():
     genres = session.query(Genre).all()
     recent_books = session.query(Book).limit(10)
-    for book in session.query(Book).limit(10):
-        logging.warning(book.user)
     return jsonify(genres=[genre.serialize for genre in genres],
                    recent_books=[book.serialize for book in recent_books])
 
